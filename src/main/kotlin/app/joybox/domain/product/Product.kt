@@ -1,4 +1,4 @@
-package app.joybox.domain.model
+package app.joybox.domain.product
 
 import javax.persistence.*
 

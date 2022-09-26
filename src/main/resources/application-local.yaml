@@ -14,3 +14,12 @@ spring:
     url: ${spring.datasource.url}
     user: ${spring.datasource.username}
     password: ${spring.datasource.password}
+
+
+cloud:
+  aws:
+    endpoint: http://127.0.0.1:4566
+    accessKey: access-key
+    secretKey: secret-key
+    region: region
+    bucket: product

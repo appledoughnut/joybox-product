@@ -1,7 +1,6 @@
 package app.joybox.api.response
 
-import app.joybox.domain.model.Product
-import org.springframework.http.ResponseEntity
+import app.joybox.domain.product.Product
 
 data class ProductResponse(
     val id: Long,

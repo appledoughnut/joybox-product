@@ -6,5 +6,13 @@ services:
     environment:
       - POSTGRES_PASSWORD=1234
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
-      - ./pginit:/docker-entrypoint-initdb.d
+      - ./pg/data:/var/lib/postgresql/data
+      - ./pg/init:/docker-entrypoint-initdb.d
+  localstack:
+    image: localstack/localstack
+    ports:
+      - 4566:4566
+    environment:
+      - SERVICES=s3
+    volumes:
+      - ./localstack/init:/docker-entrypoint-initaws.d
