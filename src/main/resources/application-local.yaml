@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/test
+    url: jdbc:postgresql://localhost:5432/joybox
     username: postgres
     password: 1234
   jpa:
@@ -22,4 +22,4 @@ cloud:
     accessKey: access-key
     secretKey: secret-key
     region: region
-    bucket: product
+    bucket: image
