@@ -5,16 +5,10 @@ import com.amazonaws.services.s3.model.ObjectMetadata
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.io.InputStream
-
-data class Image(
-    val name: String,
-    val data: InputStream
-) {
-
-}
+import java.util.*
 
 interface ImageStorage {
-    fun save(image: Image)
+    fun save(data: InputStream): UUID
 }
 
 @Component
@@ -24,9 +18,11 @@ class S3ImageStorage(
     private val bucket: String
 ): ImageStorage {
 
-    override fun save(image: Image) {
+    override fun save(data: InputStream): UUID {
+        val uuid = UUID.randomUUID()
         val metadata = ObjectMetadata()
-        metadata.contentLength = image.data.available().toLong()
-        amazonS3.putObject(this.bucket, image.name, image.data, metadata)
+        amazonS3.putObject(this.bucket, uuid.toString(), data, metadata)
+
+        return uuid
     }
 }

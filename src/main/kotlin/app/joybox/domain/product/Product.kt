@@ -9,4 +9,5 @@ class Product(
     @Column(name = "title") val title: String,
     @Column(name = "price") val price: Int,
     @Column(name = "description") val description: String,
+    @Column(name = "")
 )
