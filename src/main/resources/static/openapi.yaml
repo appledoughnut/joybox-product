@@ -6,6 +6,9 @@ info:
 paths:
   /{id}:
     get:
+      tags:
+        - Product
+      operationId: getProduct
       description: Get product details
       parameters:
         - name: id
