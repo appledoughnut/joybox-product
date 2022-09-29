@@ -23,3 +23,10 @@ cloud:
     secretKey: secret-key
     region: region
     bucket: image
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    url: /api-docs.yaml
+    path: /api-docs
