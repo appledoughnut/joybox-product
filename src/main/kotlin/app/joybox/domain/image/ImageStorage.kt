@@ -22,7 +22,6 @@ class S3ImageStorage(
         val uuid = UUID.randomUUID()
         val metadata = ObjectMetadata()
         amazonS3.putObject(this.bucket, uuid.toString(), data, metadata)
-
         return uuid
     }
 }

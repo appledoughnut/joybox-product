@@ -6,7 +6,7 @@ data class ProductResponse(
     val id: Long,
     val title: String,
     val price: Int,
-    val description: String
+    val description: String?
 ) {
     companion object {
         fun from(product: Product): ProductResponse {
