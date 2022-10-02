@@ -2,6 +2,8 @@ package app.joybox.domain.product
 
 
 import app.joybox.domain.image.Image
+import org.springframework.data.annotation.CreatedDate
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
@@ -13,4 +15,5 @@ class Product(
     @Column(name = "images") @OneToMany(mappedBy = "product") val images: List<Image>
 ){
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE) val id: Long? = null
+    @Column(name = "created_at") @CreatedDate val createdAt: LocalDateTime? = null
 }

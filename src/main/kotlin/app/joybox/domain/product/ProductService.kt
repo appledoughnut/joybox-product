@@ -15,8 +15,6 @@ class ProductService(
     private val imageRepository: ImageRepository,
     private val imageStorage: ImageStorage
 ) {
-
-
     fun getProduct(id: Long): Product? {
         return this.productRepository.findById(id)
             .orElse(null)
@@ -36,12 +34,9 @@ class ProductService(
 
     fun addImage(imageFile: MultipartFile): UUID {
         val id = imageStorage.save(imageFile.inputStream)
-        val image = Image(
-            id = id,
-            name = imageFile.name,
-            product = null
-        )
-        return imageRepository.save(image).id
+        val image = Image(id)
+        image.name = imageFile.name
+        return imageRepository.save(image).id!!
     }
 
 }

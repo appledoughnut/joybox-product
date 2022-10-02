@@ -35,8 +35,9 @@ class ProductController(
     }
 
     @PostMapping("/image")
+
     fun addImage(@RequestParam image: MultipartFile): ResponseEntity<AddImageResponse> {
         val uuid = productService.addImage(image)
-        return ResponseEntity.ok(AddImageResponse.from(uuid))
+        return ResponseEntity.status(HttpStatus.CREATED).body(AddImageResponse.from(uuid))
     }
 }

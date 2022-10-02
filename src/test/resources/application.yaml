@@ -1,3 +1,18 @@
 spring:
   flyway:
     enabled: false
+  main:
+    allow-bean-definition-overriding: true
+
+springdoc:
+  api-docs:
+    enabled: false
+
+cloud:
+  aws:
+    endpoint: http://127.0.0.1:4566
+    image: localstack/localstack
+    accessKey: access-key
+    secretKey: secret-key
+    region: ap-northeast-2
+    bucket: image
