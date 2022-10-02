@@ -27,7 +27,7 @@ import kotlin.io.path.toPath
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = [AWSTestConfig::class, JPAConfig::class]
 )
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS) //TODO
 class ProductE2ETest {
 
     @Value("\${cloud.aws.bucket}")
@@ -61,7 +61,7 @@ class ProductE2ETest {
         assertEquals(HttpStatus.CREATED, response.statusCode)
         assertNotNull(response.body)
 
-        val uuid = response.body!!.uuid
+        val uuid = response.body!!.id
         assertNotNull(uuid)
     }
 
