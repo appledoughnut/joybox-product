@@ -1,0 +1,53 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Product API
+  description: Apis to get and manage products
+paths:
+  /{id}:
+    get:
+      tags:
+        - Product
+      operationId: getProduct
+      description: Get product details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+components:
+  schemas:
+    Product:
+      type: object
+      required:
+        - id
+        - title
+        - price
+        - description
+      properties:
+        id:
+          type: integer
+          description: id of product
+          example: 12
+        title:
+          type: string
+          description: title of product
+          example: Elden Ring
+        price:
+          type: integer
+          description: price of product
+          example: 64000
+        description:
+          type: string
+          description: description for product
+          example: This game is awesome!!
+
