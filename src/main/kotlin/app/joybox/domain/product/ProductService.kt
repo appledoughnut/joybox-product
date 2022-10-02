@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.util.*
 
+class ImageNotFoundException: Exception() {}
+
 @Service
 class ProductService(
     private val productRepository: ProductRepository,
@@ -14,19 +16,32 @@ class ProductService(
     private val imageStorage: ImageStorage
 ) {
 
+
     fun getProduct(id: Long): Product? {
         return this.productRepository.findById(id)
             .orElse(null)
     }
 
+    fun addProduct(command: AddProductCommand) {
+        val imagesIds = command.imagesIds
+        val images = imageRepository.findByIdIn(imagesIds)
+        val product = Product(
+            title = command.title,
+            price = command.price,
+            description = command.description,
+            images = images
+        )
+        productRepository.save(product)
+    }
+
     fun addImage(imageFile: MultipartFile): UUID {
-        val uuid = imageStorage.save(imageFile.inputStream)
+        val id = imageStorage.save(imageFile.inputStream)
         val image = Image(
-            uuid = uuid,
+            id = id,
             name = imageFile.name,
-            createdAt = null,
             product = null
         )
-        return imageRepository.save(image).uuid
+        return imageRepository.save(image).id
     }
+
 }

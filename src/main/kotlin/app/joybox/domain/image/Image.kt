@@ -12,8 +12,9 @@ import javax.validation.constraints.NotNull
 @Table(name="product_images")
 @EntityListeners( AuditingEntityListener::class )
 data class Image(
-    @Id val uuid: UUID,
+    @Id val id: UUID,
     @Column(name = "name") @NotNull val name: String,
-    @Column(name = "created_at") @CreatedDate val createdAt: LocalDateTime?,
     @JoinColumn(name = "product_id") @ManyToOne val product: Product?
-)
+) {
+    @Column(name = "created_at") @CreatedDate val createdAt: LocalDateTime? = null
+}

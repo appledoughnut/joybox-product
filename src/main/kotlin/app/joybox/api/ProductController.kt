@@ -1,9 +1,11 @@
 package app.joybox.api
 
+import app.joybox.api.request.AddProductRequest
 import app.joybox.api.response.AddImageResponse
+import app.joybox.api.response.AddProductResponse
 import app.joybox.api.response.ProductResponse
-import app.joybox.domain.image.ImageStorage
 import app.joybox.domain.product.ProductService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
@@ -14,7 +16,7 @@ class ProductController(
     private val productService: ProductService
 ) {
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     fun getProduct(
         @PathVariable id: Long
     ): ResponseEntity<ProductResponse> {
@@ -23,7 +25,16 @@ class ProductController(
         return ResponseEntity.ok(ProductResponse.from(product))
     }
 
-    @PostMapping("**/image")
+    @PostMapping
+    fun addProduct(
+        @RequestBody request: AddProductRequest
+    ): ResponseEntity<AddProductResponse> {
+        val command = request.toCommand()
+        productService.addProduct(command)
+        return ResponseEntity.status(HttpStatus.CREATED).build()
+    }
+
+    @PostMapping("/image")
     fun addImage(@RequestParam image: MultipartFile): ResponseEntity<AddImageResponse> {
         val uuid = productService.addImage(image)
         return ResponseEntity.ok(AddImageResponse.from(uuid))

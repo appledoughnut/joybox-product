@@ -1,13 +1,13 @@
 package app.joybox.api.response
 
-import java.util.UUID
+import java.util.*
 
 data class AddImageResponse(
-    val imageUUIDString: String
+    val uuid: UUID
 ) {
     companion object {
         fun from(uuid: UUID): AddImageResponse {
-            return AddImageResponse(uuid.toString())
+            return AddImageResponse(uuid)
         }
     }
 }
