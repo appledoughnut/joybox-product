@@ -4,7 +4,6 @@ import app.joybox.api.request.AddProductRequest
 import app.joybox.api.response.AddImageResponse
 import app.joybox.api.response.AddProductResponse
 import app.joybox.api.response.ProductResponse
-import app.joybox.domain.product.NullIdException
 import app.joybox.domain.product.ProductNotFoundException
 import app.joybox.domain.product.ProductService
 import org.springframework.http.HttpStatus
@@ -43,8 +42,6 @@ class ProductController(
         try {
             productService.deleteProduct(id)
         } catch (e: ProductNotFoundException) {
-            return ResponseEntity.badRequest().build()
-        } catch (e: NullIdException) {
             return ResponseEntity.badRequest().build()
         }
         return ResponseEntity.ok().build()

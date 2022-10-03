@@ -1,6 +1,7 @@
 package app.joybox.api
 
 import app.joybox.api.request.AddProductRequest
+import app.joybox.domain.product.ProductNotFoundException
 import app.joybox.domain.product.ProductService
 import io.mockk.every
 import io.mockk.mockk
@@ -11,6 +12,7 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.core.io.ClassPathResource
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.multipart
 import org.springframework.test.web.servlet.post
 import java.nio.file.Files
@@ -47,6 +49,17 @@ internal class ProductControllerTest {
         }.andExpect {
             status { isCreated() }
         }
+    }
+
+    @Test
+    fun `Should return status code 400 when delete product with id of not existing product`() {
+
+        every { productService.deleteProduct(any()) } throws ProductNotFoundException()
+
+        mvc.delete("/api/1")
+            .andExpect {
+                status { isBadRequest() }
+            }
     }
 
     @Test

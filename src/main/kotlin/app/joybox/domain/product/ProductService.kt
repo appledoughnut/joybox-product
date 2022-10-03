@@ -10,7 +10,8 @@ import java.util.*
 
 class ProductNotFoundException : Exception()
 class ImageNotFoundException : Exception()
-class NullIdException: Exception()
+class NullIdException : Exception()
+
 @Service
 class ProductService(
     private val productRepository: ProductRepository,
@@ -38,14 +39,10 @@ class ProductService(
     }
 
     fun deleteProduct(id: Long) {
-        try {
-            if (productRepository.existsById(id))
-                productRepository.deleteById(id)
-            else
-                throw ProductNotFoundException()
-        } catch (e: IllegalArgumentException) {
-            throw NullIdException()
-        }
+        if (productRepository.existsById(id))
+            productRepository.deleteById(id)
+        else
+            throw ProductNotFoundException()
     }
 
     fun addImage(imageFile: MultipartFile): UUID {
