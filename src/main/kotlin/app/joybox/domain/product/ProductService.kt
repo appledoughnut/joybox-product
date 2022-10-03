@@ -1,5 +1,6 @@
 package app.joybox.domain.product
 
+import app.joybox.api.command.AddProductCommand
 import app.joybox.domain.image.Image
 import app.joybox.domain.image.ImageRepository
 import app.joybox.domain.image.ImageStorage
@@ -7,8 +8,9 @@ import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.util.*
 
-class ImageNotFoundException : Exception() {}
-
+class ProductNotFoundException : Exception()
+class ImageNotFoundException : Exception()
+class NullIdException: Exception()
 @Service
 class ProductService(
     private val productRepository: ProductRepository,
@@ -33,6 +35,18 @@ class ProductService(
         product.description = command.description
         product.images = images.toMutableList()
         productRepository.save(product)
+    }
+
+    fun deleteProduct(command: DeleteProductCommand) {
+        try {
+            val productId = command.id
+            if (productRepository.existsById(productId))
+                productRepository.deleteById(productId)
+            else
+                throw ProductNotFoundException()
+        } catch (e: IllegalArgumentException) {
+            throw NullIdException()
+        }
     }
 
     fun addImage(imageFile: MultipartFile): UUID {
