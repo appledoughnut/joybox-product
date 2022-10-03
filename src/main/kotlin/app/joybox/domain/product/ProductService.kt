@@ -19,8 +19,12 @@ class ProductService(
     private val imageStorage: ImageStorage
 ) {
     fun getProduct(id: Long): Product? {
-        return this.productRepository.findById(id)
+        return productRepository.findById(id)
             .orElse(null)
+    }
+
+    fun getProducts(): List<Product>? {
+        return productRepository.findAll()
     }
 
     fun addProduct(command: AddProductCommand) {
@@ -51,4 +55,5 @@ class ProductService(
         image.name = imageFile.name
         return imageRepository.save(image).id!!
     }
+
 }

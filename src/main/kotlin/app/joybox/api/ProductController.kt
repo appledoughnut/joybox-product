@@ -3,7 +3,8 @@ package app.joybox.api
 import app.joybox.api.request.AddProductRequest
 import app.joybox.api.response.AddImageResponse
 import app.joybox.api.response.AddProductResponse
-import app.joybox.api.response.ProductResponse
+import app.joybox.api.response.GetProductResponse
+import app.joybox.api.response.GetSimpleProductsResponse
 import app.joybox.domain.product.ProductNotFoundException
 import app.joybox.domain.product.ProductService
 import org.springframework.http.HttpStatus
@@ -20,10 +21,18 @@ class ProductController(
     @GetMapping("/{id}")
     fun getProduct(
         @PathVariable id: Long
-    ): ResponseEntity<ProductResponse> {
+    ): ResponseEntity<GetProductResponse> {
         val product = productService.getProduct(id)
             ?: return ResponseEntity.badRequest().build()
-        return ResponseEntity.ok(ProductResponse.from(product))
+        return ResponseEntity.ok(GetProductResponse.from(product))
+    }
+
+    @GetMapping
+    fun getSimpleProducts(): ResponseEntity<GetSimpleProductsResponse> {
+        val products = productService.getProducts()
+        if(products.isNullOrEmpty())
+            return ResponseEntity.ok(GetSimpleProductsResponse())
+        return ResponseEntity.ok(GetSimpleProductsResponse.from(products))
     }
 
     @PostMapping
