@@ -37,11 +37,10 @@ class ProductService(
         productRepository.save(product)
     }
 
-    fun deleteProduct(command: DeleteProductCommand) {
+    fun deleteProduct(id: Long) {
         try {
-            val productId = command.id
-            if (productRepository.existsById(productId))
-                productRepository.deleteById(productId)
+            if (productRepository.existsById(id))
+                productRepository.deleteById(id)
             else
                 throw ProductNotFoundException()
         } catch (e: IllegalArgumentException) {
