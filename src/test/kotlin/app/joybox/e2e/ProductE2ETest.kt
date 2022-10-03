@@ -19,7 +19,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.FileSystemResource
 import org.springframework.http.*
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.annotation.DirtiesContext.*
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
@@ -31,8 +30,6 @@ import kotlin.io.path.toPath
     classes = [AWSTestConfig::class, JPAConfig::class]
 )
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
-
 class ProductE2ETest {
 
     @Value("\${cloud.aws.bucket}")
@@ -47,7 +44,6 @@ class ProductE2ETest {
     @BeforeAll
     fun beforeAll() {
         this.s3client.createBucket(bucket)
-
     }
 
     @Test
@@ -57,7 +53,6 @@ class ProductE2ETest {
 
         val response = template.getForEntity("/api", GetSimpleProductsResponse::class.java)
         assertEquals(HttpStatus.OK, response.statusCode)
-
     }
 
     @Test
