@@ -7,9 +7,9 @@ data class AddProductRequest(
     val title: String,
     val price: Int,
     val description: String,
-    val imagesIds: List<UUID>?
+    val imageIds: List<UUID>?
 ) {
     fun toCommand(): AddProductCommand {
-        return AddProductCommand(title, price, description, imagesIds)
+        return AddProductCommand(title, price, description, imageIds)
     }
 }
