@@ -1,6 +1,8 @@
 package app.joybox.e2e
 
+import app.joybox.api.request.AddProductRequest
 import app.joybox.api.response.AddImageResponse
+import app.joybox.api.response.AddProductResponse
 import app.joybox.config.AWSTestConfig
 import app.joybox.config.JPAConfig
 import com.amazonaws.services.s3.AmazonS3
@@ -15,12 +17,10 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.FileSystemResource
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
+import org.springframework.http.*
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
+import java.util.*
 import kotlin.io.path.toPath
 
 @SpringBootTest(
@@ -65,12 +65,34 @@ class ProductE2ETest {
         assertNotNull(uuid)
     }
 
-//    @Test
-//    fun `Should return status code 201 when adding product`() {
-//        val request = AddProductRequest(
-//
-//        )
-//        val response = template.postForEntity("/api", request, Any::class.java)
-//        assertEquals(HttpStatus.CREATED, response.statusCode)
-//    }
+    @Test
+    fun `Should return status code 201 when adding product`() {
+        val request = TestData.addProductRequest()
+        val response = template.postForEntity("/api", request, AddProductResponse::class.java)
+        assertEquals(HttpStatus.CREATED, response.statusCode)
+    }
+
+    @Test
+    fun `Should return status code 200 when deleting product`() {
+        val addProductRequest = TestData.addProductRequest()
+        template.postForEntity("/api", addProductRequest, AddProductResponse::class.java)
+
+        template.getForEntity("/api")
+
+
+        template.exchange("/api/")
+    }
+}
+
+class TestData {
+    companion object {
+        fun addProductRequest(
+            title: String = "title",
+            price: Int = 10000,
+            description: String = "description",
+            imageIds: List<UUID>? = emptyList()
+        ): AddProductRequest {
+            return AddProductRequest(title, price, description, imageIds)
+        }
+    }
 }
