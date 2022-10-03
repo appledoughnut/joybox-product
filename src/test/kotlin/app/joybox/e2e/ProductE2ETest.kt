@@ -3,6 +3,7 @@ package app.joybox.e2e
 import app.joybox.api.request.AddProductRequest
 import app.joybox.api.response.AddImageResponse
 import app.joybox.api.response.AddProductResponse
+import app.joybox.api.response.GetSimpleProductsResponse
 import app.joybox.config.AWSTestConfig
 import app.joybox.config.JPAConfig
 import com.amazonaws.services.s3.AmazonS3
@@ -42,6 +43,16 @@ class ProductE2ETest {
     @BeforeAll
     fun beforeAll() {
         this.s3client.createBucket(bucket)
+    }
+
+    @Test
+    fun `Should return status code 200 and simple products list`() {
+        val addProductRequest = TestData.addProductRequest()
+        template.postForEntity("/api", addProductRequest, AddProductResponse::class.java)
+
+        val response = template.getForEntity("/api", GetSimpleProductsResponse::class.java)
+        assertEquals(HttpStatus.OK, response.statusCode)
+
     }
 
     @Test
