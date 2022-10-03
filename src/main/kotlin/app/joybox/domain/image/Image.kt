@@ -21,5 +21,8 @@ class Image(id: UUID? = null) {
     @JoinColumn(name = "product_id")
     @ManyToOne
     var product: Product? = null
-    @Column(name = "created_at") @CreatedDate var createdAt: LocalDateTime? = null; private set
+
+    @Column(name = "created_at")
+    @CreatedDate
+    var createdAt: LocalDateTime? = null; private set
 }

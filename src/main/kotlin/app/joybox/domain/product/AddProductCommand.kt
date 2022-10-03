@@ -5,6 +5,6 @@ import java.util.*
 data class AddProductCommand(
     val title: String,
     val price: Int,
-    val description: String?,
+    val description: String,
     val imagesIds: List<UUID>
 )

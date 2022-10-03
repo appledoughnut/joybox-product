@@ -8,12 +8,26 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "products")
-class Product(
-    @Column(name = "title") val title: String,
-    @Column(name = "price") val price: Int,
-    @Column(name = "description") @Lob val description: String?,
-    @Column(name = "images") @OneToMany(mappedBy = "product") val images: List<Image>
-){
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE) val id: Long? = null
-    @Column(name = "created_at") @CreatedDate val createdAt: LocalDateTime? = null
+class Product(id: Long? = null){
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    var id: Long? = null; private set
+
+    @Column(name = "title")
+    var title: String = ""
+
+    @Column(name = "price")
+    var price: Int = 0
+
+    @Column(name = "description")
+    @Lob
+    var description: String = ""
+
+    @Column(name = "images")
+    @OneToMany(mappedBy = "product")
+    var images: MutableList<Image> = mutableListOf()
+
+    @Column(name = "created_at")
+    @CreatedDate
+    val createdAt: LocalDateTime? = null
 }

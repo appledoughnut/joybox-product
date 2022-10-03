@@ -23,12 +23,10 @@ class ProductService(
     fun addProduct(command: AddProductCommand) {
         val imagesIds = command.imagesIds
         val images = imageRepository.findByIdIn(imagesIds)
-        val product = Product(
-            title = command.title,
-            price = command.price,
-            description = command.description,
-            images = images
-        )
+        val product = Product()
+        product.title = command.title
+        product.price = command.price
+        product.description = command.description
         productRepository.save(product)
     }
 
@@ -38,5 +36,4 @@ class ProductService(
         image.name = imageFile.name
         return imageRepository.save(image).id!!
     }
-
 }
