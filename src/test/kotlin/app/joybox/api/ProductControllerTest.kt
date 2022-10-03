@@ -1,5 +1,6 @@
 package app.joybox.api
 
+import app.joybox.api.request.AddProductRequest
 import app.joybox.domain.product.ProductService
 import io.mockk.every
 import io.mockk.mockk
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.core.io.ClassPathResource
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.multipart
+import org.springframework.test.web.servlet.post
 import java.nio.file.Files
 import java.util.*
 import kotlin.io.path.toPath
@@ -36,6 +38,15 @@ internal class ProductControllerTest {
 
     @Test
     fun addProduct() {
+
+        val request = AddProductRequest("title", 10000, "description", emptyList())
+        every { productService.addProduct(any())}
+
+        mvc.post("/api") {
+            this.content = request
+        }.andExpect {
+            status { isCreated() }
+        }
     }
 
     @Test

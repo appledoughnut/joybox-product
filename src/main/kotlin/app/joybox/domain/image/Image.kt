@@ -15,7 +15,8 @@ class Image(id: UUID? = null) {
     @Id
     var id: UUID? = id; private set
 
-    @Column(name = "name") @NotNull
+    @Column(name = "name")
+    @NotNull
     var name: String? = null
 
     @JoinColumn(name = "product_id")

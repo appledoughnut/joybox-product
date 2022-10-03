@@ -3,14 +3,27 @@ package app.joybox.domain.product
 
 import app.joybox.domain.image.Image
 import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
 import javax.persistence.*
 
+@SequenceGenerator(
+    name = "PRODUCTS_SEQ_GEN",
+    sequenceName = "PRODUCTS_SEQ",
+    initialValue = 1,
+    allocationSize = 1
+)
+
 @Entity
 @Table(name = "products")
-class Product(id: Long? = null){
+@EntityListeners(AuditingEntityListener::class)
+
+class Product(id: Long? = null) {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "PRODUCTS_SEQ_GEN"
+    )
     var id: Long? = null; private set
 
     @Column(name = "title")
@@ -29,5 +42,5 @@ class Product(id: Long? = null){
 
     @Column(name = "created_at")
     @CreatedDate
-    val createdAt: LocalDateTime? = null
+    var createdAt: LocalDateTime? = null
 }

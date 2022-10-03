@@ -6,5 +6,5 @@ data class AddProductCommand(
     val title: String,
     val price: Int,
     val description: String,
-    val imagesIds: List<UUID>
+    val imagesIds: List<UUID>?
 )
