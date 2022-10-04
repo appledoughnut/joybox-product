@@ -1,9 +1,9 @@
 package app.joybox.e2e
 
-import app.joybox.api.request.AddProductRequest
+import app.joybox.TestDataGenerator
 import app.joybox.api.response.AddImageResponse
 import app.joybox.api.response.AddProductResponse
-import app.joybox.api.response.GetSimpleProductsResponse
+import app.joybox.api.response.GetSimpleProductResponse
 import app.joybox.config.AWSTestConfig
 import app.joybox.config.JPAConfig
 import com.amazonaws.services.s3.AmazonS3
@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.boot.test.web.client.getForEntity
+import org.springframework.core.ParameterizedTypeReference
 import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.FileSystemResource
 import org.springframework.http.*
@@ -48,10 +50,11 @@ class ProductE2ETest {
 
     @Test
     fun `Should return status code 200 and simple products list`() {
-        val addProductRequest = TestData.addProductRequest()
+        val addProductRequest = TestDataGenerator.addProductRequest()
         template.postForEntity("/api", addProductRequest, AddProductResponse::class.java)
 
-        val response = template.getForEntity("/api", GetSimpleProductsResponse::class.java)
+        val response: ResponseEntity<List<GetSimpleProductResponse>> =
+            template.getForEntity("/api", object : ParameterizedTypeReference<List<GetSimpleProductResponse>>() {})
         assertEquals(HttpStatus.OK, response.statusCode)
     }
 
@@ -78,14 +81,14 @@ class ProductE2ETest {
 
     @Test
     fun `Should return status code 201 when adding product`() {
-        val request = TestData.addProductRequest()
+        val request = TestDataGenerator.addProductRequest()
         val response = template.postForEntity("/api", request, AddProductResponse::class.java)
         assertEquals(HttpStatus.CREATED, response.statusCode)
     }
 
     @Test
     fun `Should return status code 200 when deleting product`() {
-        val addProductRequest = TestData.addProductRequest()
+        val addProductRequest = TestDataGenerator.addProductRequest()
         template.postForEntity("/api", addProductRequest, AddProductResponse::class.java)
 
 //        template.getForEntity("/api")
@@ -95,15 +98,3 @@ class ProductE2ETest {
     }
 }
 
-class TestData {
-    companion object {
-        fun addProductRequest(
-            title: String = "title",
-            price: Int = 10000,
-            description: String = "description",
-            imageIds: List<UUID>? = emptyList()
-        ): AddProductRequest {
-            return AddProductRequest(title, price, description, imageIds)
-        }
-    }
-}

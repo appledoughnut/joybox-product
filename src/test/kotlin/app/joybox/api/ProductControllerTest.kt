@@ -1,8 +1,12 @@
 package app.joybox.api
 
+import app.joybox.TestDataGenerator
 import app.joybox.api.request.AddProductRequest
+import app.joybox.api.response.GetProductResponse
+import app.joybox.api.response.GetSimpleProductResponse
 import app.joybox.domain.product.ProductNotFoundException
 import app.joybox.domain.product.ProductService
+import app.joybox.utils.JsonUtils
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
@@ -11,10 +15,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.core.io.ClassPathResource
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.delete
-import org.springframework.test.web.servlet.multipart
-import org.springframework.test.web.servlet.post
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.*
 import java.nio.file.Files
 import java.util.*
 import kotlin.io.path.toPath
@@ -35,17 +37,52 @@ internal class ProductControllerTest {
     private lateinit var productService: ProductService
 
     @Test
-    fun getProduct() {
+    fun `Should return status code 200 and product details when get product`() {
+        val product = TestDataGenerator.product(id = 1L)
+        val response = GetProductResponse.from(product)
+        every { productService.getProduct(any()) } returns product
+
+        mvc.get("/api/1")
+            .andExpect {
+                status { isOk() }
+                this.jsonPath("$.id") { value(product.id) }
+                this.jsonPath("$.title") { value(product.title) }
+                this.jsonPath("$.price") { value(product.price) }
+                this.jsonPath("$.description") { value(product.description) }
+                this.jsonPath("$.images") {
+                    if (product.images != null && product.images!!.size > 0) {
+                        value(product.images)
+                    } else {
+                        doesNotExist()
+                    }
+                }
+            }
     }
 
     @Test
-    fun addProduct() {
+    fun `Should return status code 200 when get all simple products`() {
+        val length: Long = 3L
+        val products = TestDataGenerator.products(length)
+        val response = GetSimpleProductResponse.from(products)
 
+        every { productService.getProducts() } returns products
+
+        mvc.get("/api")
+            .andExpect {
+                status { isOk() }
+                jsonPath("$.length()") { value(length) }
+            }
+    }
+
+    @Test
+    fun `Should return status code 201 when add product`() {
         val request = AddProductRequest("title", 10000, "description", emptyList())
-        every { productService.addProduct(any())}
+        val content = JsonUtils.toJson(request)
+        every { productService.addProduct(any()) } returns Unit
 
         mvc.post("/api") {
-            this.content = request
+            this.contentType = MediaType.APPLICATION_JSON
+            this.content = content
         }.andExpect {
             status { isCreated() }
         }
@@ -74,8 +111,8 @@ internal class ProductControllerTest {
         mvc.multipart("/api/image") {
             this.file("image", file)
         }.andExpect {
-            status { isOk() }
-            content { jsonPath("$.uuid") { this.value(uuid.toString())} }
+            status { isCreated() }
+            content { jsonPath("$.id") { this.value(uuid.toString()) } }
         }
     }
 }

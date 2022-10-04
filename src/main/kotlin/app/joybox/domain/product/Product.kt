@@ -24,7 +24,7 @@ class Product(id: Long? = null) {
         strategy = GenerationType.SEQUENCE,
         generator = "PRODUCTS_SEQ_GEN"
     )
-    var id: Long? = null; private set
+    var id: Long? = id; private set
 
     @Column(name = "title")
     var title: String = ""
@@ -38,7 +38,7 @@ class Product(id: Long? = null) {
 
     @Column(name = "images")
     @OneToMany(mappedBy = "product")
-    var images: MutableList<Image> = mutableListOf()
+    var images: MutableList<Image>? = mutableListOf()
 
     @Column(name = "created_at")
     @CreatedDate

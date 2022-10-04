@@ -3,7 +3,7 @@ package app.joybox.api
 import app.joybox.api.request.AddProductRequest
 import app.joybox.api.response.AddImageResponse
 import app.joybox.api.response.GetProductResponse
-import app.joybox.api.response.GetSimpleProductsResponse
+import app.joybox.api.response.GetSimpleProductResponse
 import app.joybox.domain.product.ProductNotFoundException
 import app.joybox.domain.product.ProductService
 import org.springframework.http.HttpStatus
@@ -27,11 +27,11 @@ class ProductController(
     }
 
     @GetMapping
-    fun getSimpleProducts(): ResponseEntity<GetSimpleProductsResponse> {
+    fun getSimpleProducts(): ResponseEntity<List<GetSimpleProductResponse>> {
         val products = productService.getProducts()
         if(products.isNullOrEmpty())
-            return ResponseEntity.ok(GetSimpleProductsResponse())
-        return ResponseEntity.ok(GetSimpleProductsResponse.from(products))
+            return ResponseEntity.ok(emptyList())
+        return ResponseEntity.ok(GetSimpleProductResponse.from(products))
     }
 
     @PostMapping
