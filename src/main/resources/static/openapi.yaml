@@ -15,7 +15,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: Successful response
@@ -23,6 +23,46 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Product"
+    delete:
+      tags:
+        - Product
+      operationId: deleteProduct
+      description: Delete product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+  /api:
+    get:
+      tags:
+        - Product
+      operationId: getSimpleProducts
+      description: Get list of all simple products
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "$/components/schemas/GetProductResponse"
+    post:
+      tags:
+        - Product
+      operationId: addProduct
+      description: Add product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "$/components/schema/AddProductRequest"
+      responses:
+        '200':
+          description: Successful response
   /api/{image}:
     post:
       tags:
@@ -47,7 +87,7 @@ paths:
 
 components:
   schemas:
-    Product:
+    GetProductResponse:
       type: object
       required:
         - id
@@ -71,6 +111,53 @@ components:
           type: string
           description: description for product
           example: This game is awesome!!
+    GetSimpleProductsResponse:
+      type: array
+      items:
+        type: object
+        required:
+          - id
+          - title
+          - price
+        properties:
+          id:
+            type: integer
+            description: id of product
+            example: 12
+          title:
+            type: string
+            description: title of product
+            example: Elden Ring
+          price:
+            type: integer
+            description: price of product
+            example: 64000
+    AddProductRequest:
+      type: object
+      required:
+        - title
+        - price
+        - description
+        - imageIds
+      properties:
+        title:
+          type: string
+          description: title of product
+          example: Elden Ring
+        price:
+          type: integer
+          description: price of product
+          example: 64000
+        description:
+          type: string
+          description: description for product
+          example: This game is awesome!!
+        imageIds:
+          type: array
+          items:
+            type: integer
+          description: image id list of product
+          example: [1, 2, 3]
     AddImageResponse:
       type: object
       required:

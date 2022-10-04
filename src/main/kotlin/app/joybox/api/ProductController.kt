@@ -2,7 +2,6 @@ package app.joybox.api
 
 import app.joybox.api.request.AddProductRequest
 import app.joybox.api.response.AddImageResponse
-import app.joybox.api.response.AddProductResponse
 import app.joybox.api.response.GetProductResponse
 import app.joybox.api.response.GetSimpleProductsResponse
 import app.joybox.domain.product.ProductNotFoundException
@@ -38,7 +37,7 @@ class ProductController(
     @PostMapping
     fun addProduct(
         @RequestBody request: AddProductRequest
-    ): ResponseEntity<AddProductResponse> {
+    ): ResponseEntity<Any> {
         val command = request.toCommand()
         productService.addProduct(command)
         return ResponseEntity.status(HttpStatus.CREATED).build()
