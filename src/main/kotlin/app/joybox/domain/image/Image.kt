@@ -17,7 +17,7 @@ class Image(id: UUID? = null) {
 
     @Column(name = "name")
     @NotNull
-    var name: String? = null
+    var name: String = ""
 
     @JoinColumn(name = "product_id")
     @ManyToOne
