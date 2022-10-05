@@ -38,9 +38,9 @@ class Product(id: Long? = null) {
 
     @Column(name = "images")
     @OneToMany(mappedBy = "product")
-    var images: MutableList<Image>? = mutableListOf()
+    var images: MutableList<Image> = mutableListOf()
 
     @Column(name = "created_at")
     @CreatedDate
-    var createdAt: LocalDateTime? = null
+    var createdAt: LocalDateTime = LocalDateTime.MIN
 }

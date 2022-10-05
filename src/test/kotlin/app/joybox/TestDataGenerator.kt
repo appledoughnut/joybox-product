@@ -12,7 +12,7 @@ class TestDataGenerator {
             title: String = "title",
             price: Int = 10000,
             description: String = "description",
-            images: MutableList<Image>? = mutableListOf()
+            images: MutableList<Image> = mutableListOf()
         ): Product {
             val product = Product(id)
             product.title = title
@@ -36,7 +36,7 @@ class TestDataGenerator {
             title: String = "title",
             price: Int = 10000,
             description: String = "description",
-            imageIds: List<UUID>? = emptyList()
+            imageIds: List<UUID> = emptyList()
         ): AddProductRequest {
             return AddProductRequest(title, price, description, imageIds)
         }

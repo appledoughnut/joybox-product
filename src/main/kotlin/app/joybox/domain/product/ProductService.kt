@@ -18,22 +18,26 @@ class ProductService(
     private val imageRepository: ImageRepository,
     private val imageStorage: ImageStorage
 ) {
-    fun getProduct(id: Long): Product? {
-        return productRepository.findById(id)
-            .orElse(null)
+    fun getProduct(id: Long): Product {
+        return if (productRepository.existsById(id)) {
+            productRepository.findById(id).get()
+        } else {
+            throw ProductNotFoundException()
+        }
     }
 
-    fun getProducts(): List<Product>? {
+    fun getProducts(): List<Product> {
         return productRepository.findAll()
     }
 
     fun addProduct(command: AddProductCommand) {
         val imagesIds = command.imagesIds
-        val images: List<Image> =
-            if (imagesIds.isNullOrEmpty())
-                emptyList()
-            else
-                imageRepository.findByIdIn(imagesIds)
+        val images = if (imagesIds.isEmpty()) {
+            emptyList()
+        } else {
+            imageRepository.findByIdIn(imagesIds)
+        }
+
         val product = Product()
         product.title = command.title
         product.price = command.price
@@ -55,5 +59,4 @@ class ProductService(
         image.name = imageFile.name
         return imageRepository.save(image).id!!
     }
-
 }

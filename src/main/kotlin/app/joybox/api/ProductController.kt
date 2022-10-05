@@ -29,9 +29,12 @@ class ProductController(
     @GetMapping
     fun getSimpleProducts(): ResponseEntity<List<GetSimpleProductResponse>> {
         val products = productService.getProducts()
-        if(products.isNullOrEmpty())
+        if(products.isEmpty())
             return ResponseEntity.ok(emptyList())
-        return ResponseEntity.ok(GetSimpleProductResponse.from(products))
+        val responses = products.map {
+            GetSimpleProductResponse.from(it)
+        }
+        return ResponseEntity.ok(responses)
     }
 
     @PostMapping
@@ -47,12 +50,12 @@ class ProductController(
     fun deleteProduct(
         @PathVariable id: Long
     ): ResponseEntity<Any> {
-        try {
+        return try {
             productService.deleteProduct(id)
+            ResponseEntity.ok().build()
         } catch (e: ProductNotFoundException) {
-            return ResponseEntity.badRequest().build()
+            ResponseEntity.badRequest().build()
         }
-        return ResponseEntity.ok().build()
     }
 
     @PostMapping("/image")

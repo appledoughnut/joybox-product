@@ -8,14 +8,12 @@ class GetSimpleProductResponse(
     val price: Int
 ) {
     companion object {
-        fun from(products: List<Product>): List<GetSimpleProductResponse> {
-            return products.map {
-                GetSimpleProductResponse(
-                    it.id!!,
-                    it.title,
-                    it.price
-                )
-            }
+        fun from(product: Product): GetSimpleProductResponse {
+            return GetSimpleProductResponse(
+                product.id!!,
+                product.title,
+                product.price
+            )
         }
 
     }

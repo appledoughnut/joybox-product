@@ -2,8 +2,6 @@ package app.joybox.api
 
 import app.joybox.TestDataGenerator
 import app.joybox.api.request.AddProductRequest
-import app.joybox.api.response.GetProductResponse
-import app.joybox.api.response.GetSimpleProductResponse
 import app.joybox.domain.product.ProductNotFoundException
 import app.joybox.domain.product.ProductService
 import app.joybox.utils.JsonUtils
@@ -35,11 +33,9 @@ internal class ProductControllerTest {
 
     @Autowired
     private lateinit var productService: ProductService
-
     @Test
     fun `Should return status code 200 and product details when get product`() {
-        val product = TestDataGenerator.product(id = 1L)
-        val response = GetProductResponse.from(product)
+        val product = TestDataGenerator.product(1L)
         every { productService.getProduct(any()) } returns product
 
         mvc.get("/api/1")
@@ -50,7 +46,7 @@ internal class ProductControllerTest {
                 this.jsonPath("$.price") { value(product.price) }
                 this.jsonPath("$.description") { value(product.description) }
                 this.jsonPath("$.images") {
-                    if (product.images != null && product.images!!.size > 0) {
+                    if (product.images.size > 0) {
                         value(product.images)
                     } else {
                         doesNotExist()
@@ -61,9 +57,8 @@ internal class ProductControllerTest {
 
     @Test
     fun `Should return status code 200 when get all simple products`() {
-        val length: Long = 3L
+        val length = 3L
         val products = TestDataGenerator.products(length)
-        val response = GetSimpleProductResponse.from(products)
 
         every { productService.getProducts() } returns products
 
