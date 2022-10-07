@@ -29,8 +29,8 @@ class ProductController(
     @GetMapping
     fun getSimpleProducts(): ResponseEntity<List<GetSimpleProductResponse>> {
         val products = productService.getProducts()
-        if(products.isEmpty())
-            return ResponseEntity.ok(emptyList())
+//        if(products.isEmpty())
+//            return ResponseEntity.ok(emptyList())
         val responses = products.map {
             GetSimpleProductResponse.from(it)
         }

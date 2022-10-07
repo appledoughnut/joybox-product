@@ -2,12 +2,16 @@ package app.joybox.api
 
 import app.joybox.TestDataGenerator
 import app.joybox.api.request.AddProductRequest
+import app.joybox.api.response.GetSimpleProductResponse
+import app.joybox.domain.product.Product
 import app.joybox.domain.product.ProductNotFoundException
 import app.joybox.domain.product.ProductService
 import app.joybox.utils.JsonUtils
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.TestConfiguration
@@ -55,9 +59,9 @@ internal class ProductControllerTest {
             }
     }
 
-    @Test
-    fun `Should return status code 200 when get all simple products`() {
-        val length = 3L
+    @ParameterizedTest
+    @ValueSource(longs = [0L, 3L])
+    fun `Should return status code 200 when get all simple products`(length: Long) {
         val products = TestDataGenerator.products(length)
 
         every { productService.getProducts() } returns products
@@ -108,6 +112,14 @@ internal class ProductControllerTest {
         }.andExpect {
             status { isCreated() }
             content { jsonPath("$.id") { this.value(uuid.toString()) } }
+        }
+    }
+
+    @Test
+    fun mapTest() {
+        val products = emptyList<Product>()
+        val productResponseList = products.map {
+            GetSimpleProductResponse.from(it)
         }
     }
 }
