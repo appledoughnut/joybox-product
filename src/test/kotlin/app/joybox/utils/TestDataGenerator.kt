@@ -1,4 +1,4 @@
-package app.joybox
+package app.joybox.utils
 
 import app.joybox.api.request.AddProductRequest
 import app.joybox.domain.image.Image
@@ -28,7 +28,7 @@ class TestDataGenerator {
         ): List<Product> {
             val products = mutableListOf<Product>()
             for (i: Long in 1L..len)
-                products.add(this.product(i))
+                products.add(product(i))
             return products.toList()
         }
 

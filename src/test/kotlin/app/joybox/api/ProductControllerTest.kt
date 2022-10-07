@@ -1,12 +1,12 @@
 package app.joybox.api
 
-import app.joybox.TestDataGenerator
 import app.joybox.api.request.AddProductRequest
 import app.joybox.api.response.GetSimpleProductResponse
 import app.joybox.domain.product.Product
 import app.joybox.domain.product.ProductNotFoundException
 import app.joybox.domain.product.ProductService
 import app.joybox.utils.JsonUtils
+import app.joybox.utils.TestDataGenerator
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
