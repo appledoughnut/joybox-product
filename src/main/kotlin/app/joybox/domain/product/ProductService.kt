@@ -1,5 +1,6 @@
 package app.joybox.domain.product
 
+import app.joybox.api.command.AddProductCommand
 import app.joybox.domain.image.Image
 import app.joybox.domain.image.ImageRepository
 import app.joybox.domain.image.ImageStorage
@@ -7,7 +8,9 @@ import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.util.*
 
-class ImageNotFoundException: Exception() {}
+class ProductNotFoundException : Exception()
+class ImageNotFoundException : Exception()
+class NullIdException : Exception()
 
 @Service
 class ProductService(
@@ -15,19 +18,39 @@ class ProductService(
     private val imageRepository: ImageRepository,
     private val imageStorage: ImageStorage
 ) {
-    fun getProduct(id: Long): Product? {
-        return this.productRepository.findById(id)
-            .orElse(null)
+    fun getProduct(id: Long): Product {
+        return if (productRepository.existsById(id)) {
+            productRepository.findById(id).get()
+        } else {
+            throw ProductNotFoundException()
+        }
+    }
+
+    fun getProducts(): List<Product> {
+        return productRepository.findAll()
     }
 
     fun addProduct(command: AddProductCommand) {
         val imagesIds = command.imagesIds
-        val images = imageRepository.findByIdIn(imagesIds)
+        val images = if (imagesIds.isEmpty()) {
+            emptyList()
+        } else {
+            imageRepository.findByIdIn(imagesIds)
+        }
+
         val product = Product()
         product.title = command.title
         product.price = command.price
         product.description = command.description
+        product.images = images.toMutableList()
         productRepository.save(product)
+    }
+
+    fun deleteProduct(id: Long) {
+        if (productRepository.existsById(id))
+            productRepository.deleteById(id)
+        else
+            throw ProductNotFoundException()
     }
 
     fun addImage(imageFile: MultipartFile): UUID {

@@ -1,6 +1,9 @@
 package app.joybox.e2e
 
+import app.joybox.TestDataGenerator
 import app.joybox.api.response.AddImageResponse
+import app.joybox.api.response.AddProductResponse
+import app.joybox.api.response.GetSimpleProductResponse
 import app.joybox.config.AWSTestConfig
 import app.joybox.config.JPAConfig
 import com.amazonaws.services.s3.AmazonS3
@@ -13,21 +16,22 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.boot.test.web.client.getForEntity
+import org.springframework.core.ParameterizedTypeReference
 import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.FileSystemResource
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
+import org.springframework.http.*
+import org.springframework.test.annotation.DirtiesContext.*
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
+import java.util.*
 import kotlin.io.path.toPath
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = [AWSTestConfig::class, JPAConfig::class]
 )
-@TestInstance(TestInstance.Lifecycle.PER_CLASS) //TODO
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProductE2ETest {
 
     @Value("\${cloud.aws.bucket}")
@@ -42,6 +46,16 @@ class ProductE2ETest {
     @BeforeAll
     fun beforeAll() {
         this.s3client.createBucket(bucket)
+    }
+
+    @Test
+    fun `Should return status code 200 and simple products list`() {
+        val addProductRequest = TestDataGenerator.addProductRequest()
+        template.postForEntity("/api", addProductRequest, AddProductResponse::class.java)
+
+        val response: ResponseEntity<List<GetSimpleProductResponse>> =
+            template.getForEntity("/api", object : ParameterizedTypeReference<List<GetSimpleProductResponse>>() {})
+        assertEquals(HttpStatus.OK, response.statusCode)
     }
 
     @Test
@@ -65,12 +79,22 @@ class ProductE2ETest {
         assertNotNull(uuid)
     }
 
-//    @Test
-//    fun `Should return status code 201 when adding product`() {
-//        val request = AddProductRequest(
+    @Test
+    fun `Should return status code 201 when adding product`() {
+        val request = TestDataGenerator.addProductRequest()
+        val response = template.postForEntity("/api", request, AddProductResponse::class.java)
+        assertEquals(HttpStatus.CREATED, response.statusCode)
+    }
+
+    @Test
+    fun `Should return status code 200 when deleting product`() {
+        val addProductRequest = TestDataGenerator.addProductRequest()
+        template.postForEntity("/api", addProductRequest, AddProductResponse::class.java)
+
+//        template.getForEntity("/api")
 //
-//        )
-//        val response = template.postForEntity("/api", request, Any::class.java)
-//        assertEquals(HttpStatus.CREATED, response.statusCode)
-//    }
+//
+//        template.exchange("/api/")
+    }
 }
+

@@ -1,4 +1,4 @@
-package app.joybox.domain.product
+package app.joybox.api.command
 
 import java.util.*
 

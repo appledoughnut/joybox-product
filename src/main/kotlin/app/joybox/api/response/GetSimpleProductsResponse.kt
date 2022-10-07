@@ -2,20 +2,19 @@ package app.joybox.api.response
 
 import app.joybox.domain.product.Product
 
-data class ProductResponse(
+class GetSimpleProductResponse(
     val id: Long,
     val title: String,
-    val price: Int,
-    val description: String?
+    val price: Int
 ) {
     companion object {
-        fun from(product: Product): ProductResponse {
-            return ProductResponse(
+        fun from(product: Product): GetSimpleProductResponse {
+            return GetSimpleProductResponse(
                 product.id!!,
                 product.title,
-                product.price,
-                product.description
+                product.price
             )
         }
+
     }
 }
