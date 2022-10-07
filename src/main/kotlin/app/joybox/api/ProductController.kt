@@ -22,15 +22,12 @@ class ProductController(
         @PathVariable id: Long
     ): ResponseEntity<GetProductResponse> {
         val product = productService.getProduct(id)
-            ?: return ResponseEntity.badRequest().build()
         return ResponseEntity.ok(GetProductResponse.from(product))
     }
 
     @GetMapping
     fun getSimpleProducts(): ResponseEntity<List<GetSimpleProductResponse>> {
         val products = productService.getProducts()
-//        if(products.isEmpty())
-//            return ResponseEntity.ok(emptyList())
         val responses = products.map {
             GetSimpleProductResponse.from(it)
         }

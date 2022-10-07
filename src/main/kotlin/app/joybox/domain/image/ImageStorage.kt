@@ -21,7 +21,6 @@ class S3ImageStorage(
     override fun save(data: InputStream): UUID {
         val uuid = UUID.randomUUID()
         val metadata = ObjectMetadata()
-//        metadata.contentLength = data.readAllBytes().size.toLong()
         amazonS3.putObject(this.bucket, uuid.toString(), data, metadata)
         return uuid
     }
