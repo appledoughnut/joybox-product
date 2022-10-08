@@ -37,6 +37,29 @@ paths:
       responses:
         '200':
           description: Successful response
+        '400':
+          description: Failed response
+    put:
+      tags:
+        - Product
+      operationId: updateProduct
+      description: Update product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "$/components/schema/UpdateProductRequest"
+      responses:
+        '200':
+          description: Successful response
+        '400':
+          description: Failed response
   /api:
     get:
       tags:
@@ -133,6 +156,32 @@ components:
             description: price of product
             example: 64000
     AddProductRequest:
+      type: object
+      required:
+        - title
+        - price
+        - description
+        - imageIds
+      properties:
+        title:
+          type: string
+          description: title of product
+          example: Elden Ring
+        price:
+          type: integer
+          description: price of product
+          example: 64000
+        description:
+          type: string
+          description: description for product
+          example: This game is awesome!!
+        imageIds:
+          type: array
+          items:
+            type: integer
+          description: image id list of product
+          example: [1, 2, 3]
+    UpdateProductRequest:
       type: object
       required:
         - title
