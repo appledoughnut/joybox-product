@@ -1,6 +1,7 @@
 package app.joybox.api
 
 import app.joybox.api.request.AddProductRequest
+import app.joybox.api.request.UpdateProductRequest
 import app.joybox.api.response.GetSimpleProductResponse
 import app.joybox.domain.product.Product
 import app.joybox.domain.product.ProductNotFoundException
@@ -96,6 +97,34 @@ internal class ProductControllerTest {
             .andExpect {
                 status { isBadRequest() }
             }
+    }
+
+    @Test
+    fun `Should return status code 200 when update product`() {
+        val request = UpdateProductRequest("title", 10000, "description", emptyList())
+        val content = JsonUtils.toJson(request)
+        every { productService.updateProduct(any()) } returns Unit
+
+        mvc.put("/api/1") {
+            this.contentType = MediaType.APPLICATION_JSON
+            this.content = content
+        }.andExpect {
+            status { isOk() }
+        }
+    }
+
+    @Test
+    fun `Should return status code 400 when update product with id of not existing product`() {
+        val request = UpdateProductRequest("title", 10000, "description", emptyList())
+        val content = JsonUtils.toJson(request)
+        every { productService.updateProduct(any()) } throws ProductNotFoundException()
+
+        mvc.put("/api/1") {
+            this.contentType = MediaType.APPLICATION_JSON
+            this.content = content
+        }.andExpect {
+            status { isBadRequest() }
+        }
     }
 
     @Test

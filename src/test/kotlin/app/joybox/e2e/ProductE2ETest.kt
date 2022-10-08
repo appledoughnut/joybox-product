@@ -1,5 +1,6 @@
 package app.joybox.e2e
 
+import app.joybox.api.request.UpdateProductRequest
 import app.joybox.api.response.AddImageResponse
 import app.joybox.api.response.AddProductResponse
 import app.joybox.api.response.GetProductResponse
@@ -103,11 +104,31 @@ class ProductE2ETest {
                 HttpMethod.GET,
                 null,
                 object : ParameterizedTypeReference<List<GetSimpleProductResponse>>() {})
-        val ids = getSimpleProductResponses.body!!.map { it.id }
+        val id = getSimpleProductResponses.body!![0].id
 
         val getProductResponse: ResponseEntity<GetProductResponse> =
-            template.getForEntity("/api/${ids[0]}", GetProductResponse::class.java)
+            template.getForEntity("/api/$id", GetProductResponse::class.java)
         assertEquals(HttpStatus.OK, getProductResponse.statusCode)
+    }
+
+    @Test
+    fun `Should return status code 200when update product`() {
+        val addProductRequest = TestDataGenerator.addProductRequest()
+        template.postForEntity("/api", addProductRequest, AddProductResponse::class.java)
+
+        val getSimpleProductResponses =
+            template.exchange(
+                "/api",
+                HttpMethod.GET,
+                null,
+                object : ParameterizedTypeReference<List<GetSimpleProductResponse>>() {})
+
+        val id = getSimpleProductResponses.body!![0].id
+
+        val request = UpdateProductRequest("title", 10000, "description", emptyList())
+
+        val httpEntity = HttpEntity(request)
+        template.exchange("/api/$id", HttpMethod.PUT, httpEntity, Any::class.java)
     }
 
     @Test
