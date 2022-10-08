@@ -1,6 +1,7 @@
 package app.joybox.domain.product
 
 import app.joybox.api.command.AddProductCommand
+import app.joybox.api.command.UpdateProductCommand
 import app.joybox.domain.image.Image
 import app.joybox.domain.image.ImageRepository
 import app.joybox.domain.image.ImageStorage
@@ -31,11 +32,11 @@ class ProductService(
     }
 
     fun addProduct(command: AddProductCommand) {
-        val imagesIds = command.imagesIds
-        val images = if (imagesIds.isEmpty()) {
+        val imageIds = command.imageIds
+        val images = if (imageIds.isEmpty()) {
             emptyList()
         } else {
-            imageRepository.findByIdIn(imagesIds)
+            imageRepository.findByIdIn(imageIds)
         }
 
         val product = Product()
@@ -59,4 +60,40 @@ class ProductService(
         image.name = imageFile.name
         return imageRepository.save(image).id!!
     }
+
+    fun updateProduct(command: UpdateProductCommand) {
+        val id = command.id
+        val product = if(productRepository.existsById(id)) {
+            productRepository.findById(id).get()
+        } else {
+            throw ProductNotFoundException()
+        }
+
+        val imageIds = command.imageIds
+        val images = if (imageIds.isEmpty()) {
+            emptyList()
+        } else {
+            imageRepository.findByIdIn(imageIds)
+        }
+
+        product.title = command.title
+        product.price = command.price
+        product.description = command.description
+        product.images = images.toMutableList()
+
+        productRepository.save(product)
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

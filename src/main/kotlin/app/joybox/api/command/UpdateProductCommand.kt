@@ -2,9 +2,9 @@ package app.joybox.api.command
 
 import java.util.*
 
-data class AddProductCommand(
+class UpdateProductCommand(
+    val id: Long,
     val title: String,
     val price: Int,
     val description: String,
-    val imageIds: List<UUID>
-)
+    val imageIds: List<UUID>)

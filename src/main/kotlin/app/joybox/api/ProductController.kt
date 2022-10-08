@@ -1,9 +1,11 @@
 package app.joybox.api
 
 import app.joybox.api.request.AddProductRequest
+import app.joybox.api.request.UpdateProductRequest
 import app.joybox.api.response.AddImageResponse
 import app.joybox.api.response.GetProductResponse
 import app.joybox.api.response.GetSimpleProductResponse
+import app.joybox.api.response.UpdateProductResponse
 import app.joybox.domain.product.ProductNotFoundException
 import app.joybox.domain.product.ProductService
 import org.springframework.http.HttpStatus
@@ -49,6 +51,20 @@ class ProductController(
     ): ResponseEntity<Any> {
         return try {
             productService.deleteProduct(id)
+            ResponseEntity.ok().build()
+        } catch (e: ProductNotFoundException) {
+            ResponseEntity.badRequest().build()
+        }
+    }
+
+    @PutMapping("/{id}")
+    fun updateProduct(
+        @PathVariable id: Long,
+        @RequestBody request: UpdateProductRequest
+    ): ResponseEntity<UpdateProductResponse> {
+        return try {
+            val command = request.toCommand(id)
+            productService.updateProduct(command)
             ResponseEntity.ok().build()
         } catch (e: ProductNotFoundException) {
             ResponseEntity.badRequest().build()
