@@ -1,6 +1,8 @@
 package app.joybox.product
 
 import app.joybox.config.JPAConfig
+import app.joybox.domain.image.Image
+import app.joybox.domain.image.ImageRepository
 import app.joybox.domain.product.Product
 import app.joybox.domain.product.ProductRepository
 import org.junit.jupiter.api.Assertions.*
@@ -10,6 +12,8 @@ import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
+import java.time.LocalDateTime
+import java.util.*
 
 @DataJpaTest
 @Import(JPAConfig::class)
@@ -18,24 +22,40 @@ class ProductRepositoryTest {
 
     @Autowired
     lateinit var productRepository: ProductRepository
+    @Autowired
+    lateinit var imageRepository: ImageRepository
 
     @BeforeAll
     fun beforeAll() {
         productRepository.deleteAll()
+        imageRepository.deleteAll()
     }
 
     @Test
     fun `Product should have createdAt with not null when getting product`() {
-
-        val product = Product()
+        val id = 1L
+        val product = Product(id)
         product.title = "title"
         product.price = 10000
         product.description = "description"
 
         productRepository.saveAndFlush(product)
 
-        val getProduct = productRepository.findAll()[0]
+        val getProduct = productRepository.findById(id).get()
 
-        assertNotNull(getProduct.createdAt)
+        assertNotEquals(LocalDateTime.MIN, getProduct.createdAt)
+    }
+
+    @Test
+    fun `Image should have createdAt with not null when getting image`() {
+
+        val uuid = UUID.randomUUID()
+        val image = Image(uuid)
+
+        imageRepository.saveAndFlush(image)
+
+        val getProduct = imageRepository.findById(uuid).get()
+
+        assertNotEquals(LocalDateTime.MIN, getProduct.createdAt)
     }
 }
