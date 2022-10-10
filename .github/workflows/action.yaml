@@ -1,5 +1,4 @@
 name: Java CI with Gradle
-description: github action
 
 on:
   push:
