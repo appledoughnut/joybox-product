@@ -15,7 +15,6 @@ spring:
     user: ${spring.datasource.username}
     password: ${spring.datasource.password}
 
-
 cloud:
   aws:
     endpoint: http://127.0.0.1:4566
@@ -30,3 +29,8 @@ springdoc:
   swagger-ui:
     url: /openapi.yaml
     path: /api-docs
+
+management:
+  endpoints:
+    web:
+      base-path: /
