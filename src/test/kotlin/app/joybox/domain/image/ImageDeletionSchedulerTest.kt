@@ -1,17 +1,24 @@
 package app.joybox.domain.image
 
+import app.joybox.config.AWSTestConfig
+import com.amazonaws.services.s3.AmazonS3
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.FileSystemResource
 import org.springframework.transaction.annotation.Transactional
-import javax.persistence.EntityManager
 import kotlin.io.path.toPath
 
-@SpringBootTest
+@SpringBootTest(
+    classes = [AWSTestConfig::class]
+)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class ImageDeletionSchedulerTest {
 
     @Autowired
@@ -23,7 +30,15 @@ internal class ImageDeletionSchedulerTest {
     lateinit var imageDeletionScheduler: ImageDeletionScheduler
 
     @Autowired
-    lateinit var em: EntityManager
+    lateinit var s3Client: AmazonS3
+
+    @Value("\${cloud.aws.bucket}")
+    lateinit var bucket: String
+
+    @BeforeAll
+    fun beforeAll() {
+        this.s3Client.createBucket(bucket)
+    }
 
     @BeforeEach
     fun beforeEach() {
