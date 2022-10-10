@@ -1,7 +1,6 @@
-package app.joybox.image
+package app.joybox.domain.image
 
 import app.joybox.config.AWSTestConfig
-import app.joybox.domain.image.ImageStorage
 import com.amazonaws.services.s3.AmazonS3
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -19,7 +18,7 @@ import kotlin.io.path.toPath
     classes = [AWSTestConfig::class]
 )
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ImageStorageTests {
+class ImageStorageTest {
 
     @Autowired
     lateinit var imageStorage: ImageStorage

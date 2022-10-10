@@ -1,11 +1,6 @@
-package app.joybox.product
+package app.joybox.domain.product
 
 import app.joybox.api.command.UpdateProductCommand
-import app.joybox.domain.image.ImageRepository
-import app.joybox.domain.image.ImageStorage
-import app.joybox.domain.product.ProductNotFoundException
-import app.joybox.domain.product.ProductRepository
-import app.joybox.domain.product.ProductService
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
@@ -21,12 +16,6 @@ class ProductServiceTest {
 
     @MockK
     lateinit var productRepository: ProductRepository
-
-    @MockK
-    lateinit var imageRepository: ImageRepository
-
-    @MockK
-    lateinit var imageStorage: ImageStorage
 
     @Autowired
     lateinit var productService: ProductService

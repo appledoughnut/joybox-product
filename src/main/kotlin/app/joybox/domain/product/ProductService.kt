@@ -56,8 +56,7 @@ class ProductService(
 
     fun addImage(imageFile: MultipartFile): UUID {
         val id = imageStorage.save(imageFile.inputStream)
-        val image = Image(id)
-        image.name = imageFile.name
+        val image = Image.create(id, imageFile.name)
         return imageRepository.save(image).id!!
     }
 

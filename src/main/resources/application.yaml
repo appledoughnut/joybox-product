@@ -45,3 +45,7 @@ management:
   endpoints:
     web:
       base-path: /
+
+scheduler:
+  image-deletion:
+    time: 1

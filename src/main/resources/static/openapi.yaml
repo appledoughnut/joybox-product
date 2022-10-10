@@ -54,7 +54,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "$/components/schema/UpdateProductRequest"
+              $ref: "#  /components/schema/UpdateProductRequest"
       responses:
         '200':
           description: Successful response
@@ -72,7 +72,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "$/components/schemas/GetProductResponse"
+                $ref: "#/components/schemas/GetProductResponse"
     post:
       tags:
         - Product
@@ -82,7 +82,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "$/components/schema/AddProductRequest"
+              $ref: "#/components/schema/AddProductRequest"
       responses:
         '200':
           description: Successful response
