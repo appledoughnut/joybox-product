@@ -45,20 +45,20 @@ jobs:
 
     # AWS ECR build and push
     - name: AWS ECR build and push
+      id: ecr-build
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
         docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
-        echo “::set-env name=IMAGE_TAG::$IMAGE_TAG”
 
     - name: Slack Notification
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_CHANNEL: github_alarm
         SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-        SLACK_MESSAGE: $IMAGE_TAG
+        SLACK_MESSAGE: ${{steps.ecr-build.env.IMAGE_TAG}}
         SLACK_TITLE: Image tag
         SLACK_USERNAME: ImageTagBot
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
