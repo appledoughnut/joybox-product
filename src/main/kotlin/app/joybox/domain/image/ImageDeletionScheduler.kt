@@ -18,10 +18,10 @@ class ImageDeletionScheduler(
     @Scheduled(cron = "0 0 0 * * ?")
     fun executeScheduler() {
         val currentDateTime = LocalDateTime.now()
-        val standardDateTime = currentDateTime.plusDays(standardDayTerm)
+        val standardDateTime = currentDateTime.plusDays(-standardDayTerm)
         val images = imageRepository.findByProductNullAndCreatedAtLessThan(standardDateTime)
         imageRepository.deleteAll(images)
-        val ids = images.map { it.id!! }
+        val ids = images.map { it.uuid!! }
         imageStorage.deleteWithUuids(ids)
     }
 }

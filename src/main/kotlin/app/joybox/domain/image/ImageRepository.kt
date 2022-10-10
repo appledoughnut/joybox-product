@@ -7,6 +7,6 @@ import java.util.*
 
 @Repository
 interface ImageRepository: JpaRepository<Image, UUID> {
-    fun findByIdIn(uuids: List<UUID>): List<Image>
+    fun findByUuidIn(uuids: List<UUID>): List<Image>
     fun findByProductNullAndCreatedAtLessThan(createdAt: LocalDateTime): List<Image>
 }

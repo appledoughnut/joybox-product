@@ -28,7 +28,7 @@ internal class ImageDeletionSchedulerTest {
     @BeforeEach
     fun beforeEach() {
         val images = imageRepository.findAll()
-        val ids = images.map { it.id!! }
+        val ids = images.map { it.uuid!! }
         imageRepository.deleteAll()
         imageStorage.deleteWithUuids(ids)
     }

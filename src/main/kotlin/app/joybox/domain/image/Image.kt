@@ -2,6 +2,7 @@ package app.joybox.domain.image
 
 import app.joybox.domain.product.Product
 import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.domain.Persistable
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
 import java.util.*
@@ -10,9 +11,10 @@ import javax.persistence.*
 @Entity
 @Table(name = "product_images")
 @EntityListeners(AuditingEntityListener::class)
-class Image {
+class Image: Persistable<UUID> {
     @Id
-    var id: UUID? = null; private set
+    @Column(columnDefinition = "uuid")
+    var uuid: UUID? = null; private set
 
     @Column(name = "name")
     // TODO: @NotNull
@@ -25,7 +27,7 @@ class Image {
 
     @Column(name = "created_at")
     @CreatedDate
-    var createdAt: LocalDateTime = LocalDateTime.MIN; private set
+    var createdAt: LocalDateTime? = null; private set
 
     companion object {
         fun create(
@@ -33,9 +35,17 @@ class Image {
             name: String
         ): Image {
             val image = Image()
-            image.id = id
+            image.uuid = id
             image.name = name
             return image
         }
+    }
+
+    override fun getId(): UUID? {
+        return this.uuid
+    }
+
+    override fun isNew(): Boolean {
+        return this.createdAt == null
     }
 }
