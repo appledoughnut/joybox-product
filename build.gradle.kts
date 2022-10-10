@@ -20,8 +20,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("com.amazonaws:aws-java-sdk-s3:1.12.307")
+    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springdoc:springdoc-openapi-ui:1.6.11")
+    implementation("com.amazonaws:aws-java-sdk-s3:1.12.307")
     implementation("org.flywaydb:flyway-core")
 
     runtimeOnly("org.postgresql:postgresql")
@@ -32,10 +33,11 @@ dependencies {
 
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.mockk:mockk:1.13.2")
-    testImplementation("com.h2database:h2")
+    testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.testcontainers:localstack:1.17.3")
     testImplementation("org.testcontainers:junit-jupiter:1.17.3")
+    testImplementation("io.mockk:mockk:1.13.2")
+    testImplementation("com.h2database:h2")
 }
 
 tasks.withType<KotlinCompile> {
