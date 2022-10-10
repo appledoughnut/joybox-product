@@ -112,7 +112,7 @@ class ProductE2ETest {
     }
 
     @Test
-    fun `Should return status code 200when update product`() {
+    fun `Should return status code 200 when update product`() {
         val addProductRequest = TestDataGenerator.addProductRequest()
         template.postForEntity("/api", addProductRequest, AddProductResponse::class.java)
 
