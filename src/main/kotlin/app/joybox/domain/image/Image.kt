@@ -25,5 +25,5 @@ class Image(id: UUID? = null) {
 
     @Column(name = "created_at")
     @CreatedDate
-    var createdAt: LocalDateTime? = null; private set
+    var createdAt: LocalDateTime = LocalDateTime.MIN
 }
