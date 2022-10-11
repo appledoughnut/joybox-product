@@ -29,6 +29,13 @@ class AWSConfig {
     }
 
     @Bean
+    @Profile("dev")
+    fun amazonS3Dev(): AmazonS3 {
+        return AmazonS3ClientBuilder.standard()
+            .build()
+    }
+
+    @Bean
     fun amazonS3(): AmazonS3 {
         return AmazonS3ClientBuilder.standard()
             .build()
