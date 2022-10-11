@@ -1,10 +1,8 @@
-package app.joybox.product
+package app.joybox.domain.product
 
 import app.joybox.config.JPAConfig
 import app.joybox.domain.image.Image
 import app.joybox.domain.image.ImageRepository
-import app.joybox.domain.product.Product
-import app.joybox.domain.product.ProductRepository
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -50,7 +48,7 @@ class ProductRepositoryTest {
     fun `Image should have createdAt with not null when getting image`() {
 
         val uuid = UUID.randomUUID()
-        val image = Image(uuid)
+        val image = Image.create(uuid, "")
 
         imageRepository.saveAndFlush(image)
 

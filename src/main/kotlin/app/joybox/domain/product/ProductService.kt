@@ -36,7 +36,7 @@ class ProductService(
         val images = if (imageIds.isEmpty()) {
             emptyList()
         } else {
-            imageRepository.findByIdIn(imageIds)
+            imageRepository.findByUuidIn(imageIds)
         }
 
         val product = Product()
@@ -56,9 +56,8 @@ class ProductService(
 
     fun addImage(imageFile: MultipartFile): UUID {
         val id = imageStorage.save(imageFile.inputStream)
-        val image = Image(id)
-        image.name = imageFile.name
-        return imageRepository.save(image).id!!
+        val image = Image.create(id, imageFile.name)
+        return imageRepository.save(image).uuid!!
     }
 
     fun updateProduct(command: UpdateProductCommand) {
@@ -73,7 +72,7 @@ class ProductService(
         val images = if (imageIds.isEmpty()) {
             emptyList()
         } else {
-            imageRepository.findByIdIn(imageIds)
+            imageRepository.findByUuidIn(imageIds)
         }
 
         product.title = command.title

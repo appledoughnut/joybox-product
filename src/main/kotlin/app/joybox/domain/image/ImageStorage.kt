@@ -1,6 +1,8 @@
 package app.joybox.domain.image
 
 import com.amazonaws.services.s3.AmazonS3
+import com.amazonaws.services.s3.model.DeleteObjectsRequest
+import com.amazonaws.services.s3.model.DeleteObjectsRequest.*
 import com.amazonaws.services.s3.model.ObjectMetadata
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -9,6 +11,7 @@ import java.util.*
 
 interface ImageStorage {
     fun save(data: InputStream): UUID
+    fun deleteWithUuids(uuids: List<UUID>)
 }
 
 @Component
@@ -24,4 +27,17 @@ class S3ImageStorage(
         amazonS3.putObject(this.bucket, uuid.toString(), data, metadata)
         return uuid
     }
+
+    override fun deleteWithUuids(uuids:List<UUID>) {
+        if(uuids.isEmpty())
+            return
+
+        val keys = uuids.map {
+            KeyVersion(it.toString())
+        }
+        val request = DeleteObjectsRequest(bucket)
+        request.keys = keys
+        amazonS3.deleteObjects(request)
+    }
+
 }

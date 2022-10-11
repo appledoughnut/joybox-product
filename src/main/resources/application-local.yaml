@@ -3,17 +3,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/joybox
     username: postgres
     password: 1234
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
-    url: ${spring.datasource.url}
-    user: ${spring.datasource.username}
-    password: ${spring.datasource.password}
 
 cloud:
   aws:
@@ -22,15 +11,3 @@ cloud:
     secretKey: secret-key
     region: region
     bucket: image
-
-springdoc:
-  api-docs:
-    enabled: false
-  swagger-ui:
-    url: /openapi.yaml
-    path: /api-docs
-
-management:
-  endpoints:
-    web:
-      base-path: /
