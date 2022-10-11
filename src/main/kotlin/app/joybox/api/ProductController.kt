@@ -23,8 +23,12 @@ class ProductController(
     fun getProduct(
         @PathVariable id: Long
     ): ResponseEntity<GetProductResponse> {
-        val product = productService.getProduct(id)
-        return ResponseEntity.ok(GetProductResponse.from(product))
+        return try {
+            val product = productService.getProduct(id)
+            ResponseEntity.ok(GetProductResponse.from(product))
+        } catch (e: ProductNotFoundException) {
+            ResponseEntity.badRequest().build()
+        }
     }
 
     @GetMapping
