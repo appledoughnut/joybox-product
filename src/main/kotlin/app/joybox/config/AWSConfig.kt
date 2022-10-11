@@ -8,16 +8,10 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 
 @Configuration
 class AWSConfig {
-
-    @Value("\${cloud.aws.accessKey}")
-    lateinit var accessKey: String
-
-    @Value("\${cloud.aws.secretKey}")
-    lateinit var secretKey: String
-
     @Value("\${cloud.aws.region}")
     lateinit var region: String
 
@@ -25,11 +19,18 @@ class AWSConfig {
     lateinit var endpoint: String
 
     @Bean
-    fun amazonS3(): AmazonS3 {
-        val creds = BasicAWSCredentials(this.accessKey, this.secretKey)
+    @Profile("local")
+    fun amazonS3Local(): AmazonS3 {
+        val creds = BasicAWSCredentials("", "")
         return AmazonS3ClientBuilder.standard()
             .withEndpointConfiguration(AwsClientBuilder.EndpointConfiguration(this.endpoint, this.region))
             .withCredentials(AWSStaticCredentialsProvider(creds))
+            .build()
+    }
+
+    @Bean
+    fun amazonS3(): AmazonS3 {
+        return AmazonS3ClientBuilder.standard()
             .build()
     }
 }

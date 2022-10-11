@@ -28,11 +28,9 @@ class ProductController(
     }
 
     @GetMapping
-    fun getSimpleProducts(): ResponseEntity<List<GetSimpleProductResponse>> {
+    fun getProductList(): ResponseEntity<List<GetSimpleProductResponse>> {
         val products = productService.getProducts()
-        val responses = products.map {
-            GetSimpleProductResponse.from(it)
-        }
+        val responses = products.map(GetSimpleProductResponse::from)
         return ResponseEntity.ok(responses)
     }
 
