@@ -59,7 +59,7 @@ jobs:
       env:
         SLACK_CHANNEL: github_alarm
         SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-        SLACK_MESSAGE: ${{steps.ecr-build.outputs.image_tag}}
-        SLACK_TITLE: Image tag
+        SLACK_MESSAGE: "Image tag: "${{steps.ecr-build.outputs.image_tag}}
+        SLACK_TITLE: Message
         SLACK_USERNAME: [joybox-product] Image Tag Bot
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
