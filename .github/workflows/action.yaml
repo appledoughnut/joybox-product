@@ -52,14 +52,14 @@ jobs:
       run: |
         docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image_tag::$IMAGE_TAG"
+        echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
 
     - name: Slack Notification
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_CHANNEL: github_alarm
         SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-        SLACK_MESSAGE: ${{steps.ecr-build.outputs.image_tag}}
-        SLACK_TITLE: Image tag
-        SLACK_USERNAME: ImageTagBot
+        SLACK_MESSAGE: "Image tag: ${{steps.ecr-build.outputs.image_tag}}"
+        SLACK_TITLE: Message
+        SLACK_USERNAME: joybox-product] Image Tag Bot
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
