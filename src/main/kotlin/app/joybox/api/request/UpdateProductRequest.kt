@@ -1,6 +1,6 @@
 package app.joybox.api.request
 
-import app.joybox.api.command.UpdateProductCommand
+import app.joybox.domain.product.UpdateProductCommand
 import java.util.*
 
 class UpdateProductRequest(

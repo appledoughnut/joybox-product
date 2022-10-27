@@ -8,6 +8,7 @@ paths:
     get:
       tags:
         - Product
+      summary: Get product details
       operationId: getProduct
       description: Get product details
       parameters:
@@ -22,10 +23,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Product"
+                $ref: "#/components/schemas/GetProductResponse"
     delete:
       tags:
         - Product
+      summary: Delete product
       operationId: deleteProduct
       description: Delete product
       parameters:
@@ -42,6 +44,7 @@ paths:
     put:
       tags:
         - Product
+      summary: Update product
       operationId: updateProduct
       description: Update product
       parameters:
@@ -54,7 +57,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#  /components/schema/UpdateProductRequest"
+              $ref: "#/components/schema/UpdateProductRequest"
       responses:
         '200':
           description: Successful response
@@ -64,6 +67,7 @@ paths:
     get:
       tags:
         - Product
+      summary: Get list of all simple products
       operationId: getSimpleProducts
       description: Get list of all simple products
       responses:
@@ -72,10 +76,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetProductResponse"
+                $ref: "#/components/schemas/GetProductListResponse"
     post:
       tags:
         - Product
+      summary: Add product
       operationId: addProduct
       description: Add product
       requestBody:
@@ -90,8 +95,9 @@ paths:
     post:
       tags:
         - ProductImage
+      summary: Add image details
       operationId: addImage
-      description: Add Image details
+      description: Add image details
       requestBody:
         content:
           multipart/form-data:
@@ -134,7 +140,7 @@ components:
           type: string
           description: description for product
           example: This game is awesome!!
-    GetSimpleProductsResponse:
+    GetProductListResponse:
       type: array
       items:
         type: object

@@ -1,6 +1,5 @@
 package app.joybox.domain.product
 
-import app.joybox.api.command.UpdateProductCommand
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension

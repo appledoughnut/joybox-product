@@ -13,7 +13,7 @@ import javax.persistence.*
 @EntityListeners(AuditingEntityListener::class)
 class Image: Persistable<UUID> {
     @Id
-    @Column(columnDefinition = "uuid")
+    @Column(name = "id", columnDefinition = "uuid")
     var uuid: UUID? = null; private set
 
     @Column(name = "name")

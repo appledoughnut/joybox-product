@@ -25,11 +25,7 @@ spring:
 
 cloud:
   aws:
-    endpoint: http://127.0.0.1:4566
-    accessKey: access-key
-    secretKey: secret-key
-    region: region
-    bucket: image
+    bucket: joybox-product-images
 
 springdoc:
   api-docs:

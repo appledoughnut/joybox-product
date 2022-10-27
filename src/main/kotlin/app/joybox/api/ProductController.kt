@@ -23,16 +23,18 @@ class ProductController(
     fun getProduct(
         @PathVariable id: Long
     ): ResponseEntity<GetProductResponse> {
-        val product = productService.getProduct(id)
-        return ResponseEntity.ok(GetProductResponse.from(product))
+        return try {
+            val product = productService.getProduct(id)
+            ResponseEntity.ok(GetProductResponse.from(product))
+        } catch (e: ProductNotFoundException) {
+            ResponseEntity.badRequest().build()
+        }
     }
 
     @GetMapping
-    fun getSimpleProducts(): ResponseEntity<List<GetSimpleProductResponse>> {
+    fun getProductList(): ResponseEntity<List<GetSimpleProductResponse>> {
         val products = productService.getProducts()
-        val responses = products.map {
-            GetSimpleProductResponse.from(it)
-        }
+        val responses = products.map(GetSimpleProductResponse::from)
         return ResponseEntity.ok(responses)
     }
 
