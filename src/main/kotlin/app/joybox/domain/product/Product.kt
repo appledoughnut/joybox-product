@@ -5,6 +5,7 @@ import app.joybox.domain.image.Image
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
+import java.util.*
 import javax.persistence.*
 
 @SequenceGenerator(
@@ -35,6 +36,9 @@ class Product(id: Long? = null) {
     @Lob
     var description: String = ""
 
+    @Column(name = "thumbnail")
+    var thumbnail: UUID? = null
+
     @Column(name = "images")
     @OneToMany(mappedBy = "product")
     var images: MutableList<Image> = mutableListOf()
@@ -42,4 +46,16 @@ class Product(id: Long? = null) {
     @Column(name = "created_at")
     @CreatedDate
     var createdAt: LocalDateTime = LocalDateTime.MIN
+
+    fun update(
+        title: String,
+        price: Int,
+        description: String,
+        images: List<Image>
+    ) {
+        this.title = title
+        this.price = price
+        this.description = description
+        this.images = images.toMutableList()
+    }
 }

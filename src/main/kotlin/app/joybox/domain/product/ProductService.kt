@@ -38,10 +38,7 @@ class ProductService(
         }
 
         val product = Product()
-        product.title = command.title
-        product.price = command.price
-        product.description = command.description
-        product.images = images.toMutableList()
+        product.update(command.title, command.price, command.description, images)
         productRepository.save(product)
     }
 
@@ -72,14 +69,20 @@ class ProductService(
         } else {
             imageRepository.findByUuidIn(imageIds)
         }
-
-        product.title = command.title
-        product.price = command.price
-        product.description = command.description
-        product.images = images.toMutableList()
-
+        product.update(command.title, command.price, command.description, images)
         productRepository.save(product)
     }
+
+    fun addThumbnail(id: Long, thumbnailFile: MultipartFile) {
+        if(productRepository.existsById(id)) {
+            val product = productRepository.findById(id).get()
+            product.thumbnail = imageStorage.save(thumbnailFile.inputStream)
+            productRepository.save(product)
+        } else {
+            throw ProductNotFoundException()
+        }
+    }
+
 }
 
 

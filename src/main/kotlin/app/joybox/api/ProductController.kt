@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/product")
 class ProductController(
     private val productService: ProductService
 ) {
@@ -67,6 +67,19 @@ class ProductController(
         return try {
             val command = request.toCommand(id)
             productService.updateProduct(command)
+            ResponseEntity.ok().build()
+        } catch (e: ProductNotFoundException) {
+            ResponseEntity.badRequest().build()
+        }
+    }
+
+    @PostMapping("/{id}/thumbnail")
+    fun addThumbnail(
+        @PathVariable id: Long,
+        @RequestParam thumbnailImage: MultipartFile
+    ): ResponseEntity<Any> {
+        return try {
+            productService.addThumbnail(id, thumbnailImage)
             ResponseEntity.ok().build()
         } catch (e: ProductNotFoundException) {
             ResponseEntity.badRequest().build()
