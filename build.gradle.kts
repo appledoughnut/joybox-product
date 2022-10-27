@@ -23,13 +23,13 @@ dependencies {
     implementation("com.amazonaws:aws-java-sdk-s3:1.12.307")
     implementation("org.springdoc:springdoc-openapi-ui:1.6.11")
     implementation("org.flywaydb:flyway-core")
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.2")
 
     runtimeOnly("org.postgresql:postgresql")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.mockk:mockk:1.13.2")

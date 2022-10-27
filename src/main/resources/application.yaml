@@ -45,3 +45,8 @@ management:
 scheduler:
   image-deletion:
     time: 1
+
+
+logging:
+  level:
+    app.joybox: DEBUG
