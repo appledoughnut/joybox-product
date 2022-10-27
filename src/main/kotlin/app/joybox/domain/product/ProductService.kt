@@ -1,7 +1,5 @@
 package app.joybox.domain.product
 
-import app.joybox.api.command.AddProductCommand
-import app.joybox.api.command.UpdateProductCommand
 import app.joybox.domain.image.Image
 import app.joybox.domain.image.ImageRepository
 import app.joybox.domain.image.ImageStorage

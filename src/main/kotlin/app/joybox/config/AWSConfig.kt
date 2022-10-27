@@ -12,18 +12,18 @@ import org.springframework.context.annotation.Profile
 
 @Configuration
 class AWSConfig {
-    @Value("\${cloud.aws.region}")
-    lateinit var region: String
-
-    @Value("\${cloud.aws.endpoint}")
-    lateinit var endpoint: String
 
     @Bean
     @Profile("local")
-    fun amazonS3Local(): AmazonS3 {
+    fun amazonS3Local(
+        @Value("\${cloud.aws.endpoint}")
+        endpoint: String,
+        @Value("\${cloud.aws.region}")
+        region: String
+    ): AmazonS3 {
         val creds = BasicAWSCredentials("", "")
         return AmazonS3ClientBuilder.standard()
-            .withEndpointConfiguration(AwsClientBuilder.EndpointConfiguration(this.endpoint, this.region))
+            .withEndpointConfiguration(AwsClientBuilder.EndpointConfiguration(endpoint, region))
             .withCredentials(AWSStaticCredentialsProvider(creds))
             .build()
     }

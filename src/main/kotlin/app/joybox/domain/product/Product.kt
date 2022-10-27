@@ -17,7 +17,6 @@ import javax.persistence.*
 @Entity
 @Table(name = "products")
 @EntityListeners(AuditingEntityListener::class)
-
 class Product(id: Long? = null) {
     @Id
     @GeneratedValue(

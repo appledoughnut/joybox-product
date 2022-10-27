@@ -1,6 +1,6 @@
 package app.joybox.api.request
 
-import app.joybox.api.command.AddProductCommand
+import app.joybox.domain.product.AddProductCommand
 import java.util.*
 
 data class AddProductRequest(
